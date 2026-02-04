@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Meghana ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Georgia', serif;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  color: #4b1c2d;
+  text-align: center;
+}
+
+.container {
+  padding: 30px;
+}
+
+.card {
+  background: rgba(255,255,255,0.9);
+  border-radius: 25px;
+  padding: 30px;
+  max-width: 650px;
+  margin: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+h1 {
+  font-weight: normal;
+}
+
+input {
+  padding: 12px;
+  width: 80%;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  margin-top: 15px;
+}
+
+button {
+  margin-top: 18px;
+  padding: 12px 30px;
+  border-radius: 20px;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#content {
+  display: none;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 20px;
+  margin-top: 18px;
+}
+
+.countdown {
+  font-size: 20px;
+  margin: 18px 0;
+}
+
+.footer {
+  margin-top: 25px;
+  font-size: 1.1em;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- PASSWORD PAGE -->
+<div class="card" id="login">
+  <h2>🔐 Only for Meghana</h2>
+  <p>Enter our special date 💗</p>
+
+  <input type="password" id="password" placeholder="01032025">
+  <br>
+  <button onclick="unlock()">Enter</button>
+  <p id="error" style="color:#c9184a;"></p>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="card" id="content">
+  <h1>Happy Valentine’s Day Meghana ❤️</h1>
+
+  <p>
+    On 01 March 2025, we chose each other.<br>
+    Since then, my heart has been yours.
+  </p>
+
+  <div class="countdown" id="countdown"></div>
+
+  <audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <p>
+    This page is my little way of saying<br>
+    I love you — today and always.
+  </p>
+
+  <div class="gallery">
+    <img src="photo1.jpg">
+    <img src="photo2.jpg">
+    <img src="photo3.jpg">
+  </div>
+
+  <div class="footer">
+    Forever yours,<br>
+    <b>— Devanarayanan ❤️</b>
+  </div>
+</div>
+
+</div>
+
+<script>
+function unlock() {
+  if (document.getElementById("password").value === "01032025") {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
+    document.getElementById("music").play();
+  } else {
+    document.getElementById("error").innerText = "Wrong password 💔";
+  }
+}
+
+const loveDate = new Date("2025-03-01");
+setInterval(() => {
+  const days = Math.floor((new Date() - loveDate) / (1000*60*60*24));
+  document.getElementById("countdown").innerText =
+    `We have been in love for ${days} days 💞`;
+}, 1000);
+</script>
+
+</body>
+</html>
