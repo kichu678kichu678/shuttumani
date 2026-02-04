@@ -80,6 +80,29 @@ function unlock() {
   }
 }
 </script>
+<audio id="loveSong" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button onclick="playMusic()" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+">
+🎶 Play Music
+</button>
+
+<script>
+function playMusic() {
+  document.getElementById("loveSong").play();
+}
+</script>
 
 </body>
 </html>
