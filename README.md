@@ -122,7 +122,16 @@ button {
 <script>
 function unlock() {
   if (document.getElementById("password").value === "01032025") {
-    document.getElementById("login").style.display = "none";
+    document.body.innerHTML = `
+  <div id="mwah">
+    <div class="mwah-text">MWAHHH 💋💋</div>
+  </div>
+`;
+
+setTimeout(() => {
+  location.reload();
+}, 2200);
+document.getElementById("login").style.display = "none";
     document.getElementById("content").style.display = "block";
     document.getElementById("music").play();
   } else {
@@ -167,6 +176,38 @@ setInterval(() => {
 }, 800);
 </script>
 <style>
+  #mwah {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #ff9a9e, #fecfef);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.mwah-text {
+  font-size: 60px;
+  font-weight: bold;
+  color: white;
+  animation: mwahPop 2s ease forwards;
+}
+
+@keyframes mwahPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
