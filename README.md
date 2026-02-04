@@ -1,240 +1,187 @@
-# index. html
+index. html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Meghana ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Meghana ❤️</title>
 
 <style>
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Georgia', serif;
-  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-  color: #4b1c2d;
-  text-align: center;
 }
-.container { padding: 30px; }
-.card {
-  background: rgba(255,255,255,0.9);
-  border-radius: 25px;
-  padding: 30px;
-  max-width: 650px;
-  margin: auto;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+
+body {
+  background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+  height: 100vh;
+  overflow: hidden;
 }
+
+/* LOCK */
+#lock {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 input {
   padding: 12px;
-  width: 80%;
-  border-radius: 15px;
-  border: 1px solid #ccc;
-}
-button {
-  padding: 12px 30px;
-  border-radius: 20px;
+  border-radius: 8px;
   border: none;
-  background: #ff4d6d;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background: #ff6b81;
   color: white;
   font-size: 16px;
 }
-#content { display: none; }
- .heart {
+
+/* MWAAH */
+#mwah {
   position: fixed;
-  bottom: -20px;
-  font-size: 20px;
-  color: #ff4d6d;
-  animation: floatUp 6s linear infinite;
+  inset: 0;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  color: white;
+  display: none;
+  animation: pop 2s ease;
 }
 
-@keyframes floatUp {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100vh) scale(1.5);
+@keyframes pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* LETTER */
+#letter-box {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.envelope {
+  font-size: 70px;
+  cursor: pointer;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.letter {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  max-width: 90%;
+  text-align: center;
+  display: none;
+}
+
+/* HEARTS */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  color: red;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-120vh);
     opacity: 0;
   }
 }
- 
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<div class="card" id="login">
-  <h2>🔐 Only for Meghana</h2>
-  <p>Enter our special date 💗</p>
-  <input type="password" id="password" placeholder="01032025">
-  <br><br>
-  <button onclick="unlock()">Enter</button>
-  <p id="error" style="color:red;"></p>
+<!-- LOCK -->
+<div id="lock">
+  <h2>Enter Our Date ❤️</h2>
+  <input type="password" id="pass" placeholder="DDMMYYYY">
+  <button onclick="unlock()">Unlock</button>
 </div>
 
-<div class="card" id="content">
-  <h1>Happy Valentine’s Day Meghana ❤️</h1>
-  <p>
-    On 01/03/2025, we chose each other.<br>
-    This page is my promise of love.
-  </p>
+<!-- MWAAH -->
+<div id="mwah">UMMAAA 💋💋</div>
 
-  <audio id="music" loop>
-    <source src="music.mp3" type="audio/mpeg">
-  </audio>
-<div onclick="openLetter()" style="
-  margin: 30px auto;
-  font-size: 40px;
-  cursor: pointer;
-">
-💌
-<p style="font-size:16px;">Tap the letter</p>
-</div>
+<!-- LETTER -->
+<div id="letter-box">
+  <div class="envelope" onclick="openLetter()">💌</div>
 
-<div id="letter" style="
-  display:none;
-  background:#fff0f3;
-  padding:25px;
-  border-radius:20px;
-  max-width:600px;
-  margin:auto;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  animation: fadeIn 1s;
-">
-  <h2>My Love ❤️</h2>
-  <p>
-    <!-- ✍️ YOUR LOVE TEXT GOES HERE -->
-    Meghana,<br><br>
-    From the moment you came into my life,
-    everything felt warmer, calmer, and more meaningful.
-    I don’t promise perfection —
-    but I promise love, honesty, and forever choosing you.
-    <br><br>
-    Happy Valentine’s Day, my heart.
-  </p>
-</div>
+  <div class="letter" id="letter">
+    <h2>My Love ❤️</h2>
+    <p>
+      Meghana,<br><br>
+      From the day you came into my life,  
+      everything felt softer, warmer, and meaningful.  
+      Even when distance comes between us,  
+      my heart will always choose you.<br><br>
 
-  <p>Forever yours,<br><b>— shuttumaniii ❤️</b></p>
-</div>
+      01-03-2025 is not just a date,  
+      it is the day my forever began.<br><br>
 
+      Even if we cannot see each other for days,  
+      my love never leaves you for a second.
+    </p>
+    <br>
+    <strong>Faithfully yours,<br>shuttumaniii ❤️</strong>
+  </div>
 </div>
 
 <script>
 function unlock() {
-  if (document.getElementById("password").value === "01032025") {
-    document.body.innerHTML = `
-  <div id="mwah">
-    <div class="mwah-text">MWAHHH 💋💋</div>
-  </div>
-`;
+  const p = document.getElementById("pass").value;
+  if (p === "01032025") {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("mwah").style.display = "flex";
 
-setTimeout(() => {
-  location.reload();
-}, 2200);
-document.getElementById("login").style.display = "none";
-    document.getElementById("content").style.display = "block";
-    document.getElementById("music").play();
+    setTimeout(() => {
+      document.getElementById("mwah").style.display = "none";
+      document.getElementById("letter-box").style.display = "flex";
+      hearts();
+    }, 2000);
   } else {
-    document.getElementById("error").innerText = "Wrong password 💔";
-  }
-}
-</script>
-<audio id="loveSong" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<button onclick="playMusic()" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 18px;
-  background: #ff4d6d;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 14px;
-">
-🎶 Play Music
-</button>
-
-<script>
-function playMusic() {
-  document.getElementById("loveSong").play();
-}
-</script>
-<script>
-setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  document.body.appendChild(heart);
-
-  setTimeout(() => {
-    heart.remove();
-  }, 6000);
-}, 800);
-</script>
-<style>
-  #mwah {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #ff9a9e, #fecfef);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-}
-
-.mwah-text {
-  font-size: 60px;
-  font-weight: bold;
-  color: white;
-  animation: mwahPop 2s ease forwards;
-}
-
-@keyframes mwahPop {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.3);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1);
+    alert("Wrong password ❤️");
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-  .heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 22px;
-  animation: floatUp 6s linear infinite;
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100vh);
-    opacity: 0;
-  }
-}
-
-</style>
-
-<script>
 function openLetter() {
+  document.querySelector(".envelope").style.display = "none";
   document.getElementById("letter").style.display = "block";
+}
+
+function hearts() {
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+  }, 500);
 }
 </script>
 
