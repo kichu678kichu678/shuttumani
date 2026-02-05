@@ -4,171 +4,137 @@ index. html
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Where We Sat</title>
+<title>Meghana ❤️ Deva</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Georgia", serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Georgia,serif}
+body{background:linear-gradient(#fff0f5,#f3e5f5);overflow-x:hidden}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px}
 
-body{
-  min-height:100vh;
-  background:linear-gradient(#f7efe5,#e6d3b1);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  color:#4b3621;
-}
+/* ❤️ HEARTS */
+.heart{position:fixed;color:rgba(255,105,180,.6);font-size:18px;animation:float 8s linear infinite}
+@keyframes float{from{transform:translateY(100vh)}to{transform:translateY(-10vh);opacity:0}}
 
-/* HEADER */
-header{
-  padding:25px;
-  font-size:2rem;
-  letter-spacing:1px;
-}
+/* 🔐 LOCK */
+.lock{font-size:70px;cursor:pointer}
+.kiss{font-size:90px;margin-top:20px;display:none;animation:pop 1.5s forwards}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.4)}100%{transform:scale(1)}}
 
-/* CLASSROOM */
-.classroom{
-  width:100%;
-  max-width:900px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:35px;
-  padding-bottom:60px;
-}
+/* 🪑 BENCH */
+.scene{position:relative;width:90%;max-width:700px;height:300px;margin-top:30px}
+.desk{position:absolute;bottom:120px;width:100%;height:20px;background:#8d6e63}
+.bench{position:absolute;bottom:90px;width:100%;height:18px;background:#6d4c41}
+.person{position:absolute;bottom:108px;width:40px;height:80px;background:#444;border-radius:20px}
+.boy{left:45%}.girl{left:52%}
+.person::before{content:"";position:absolute;top:-28px;left:5px;width:30px;height:30px;background:#555;border-radius:50%}
+.hand{position:absolute;width:20px;height:6px;background:#555;top:35px;animation:touch 4s infinite}
+.boy .hand{right:-10px}.girl .hand{left:-10px}
+@keyframes touch{50%{transform:translateX(6px)}}
 
-/* BENCH ROW */
-.row{
-  display:flex;
-  gap:30px;
-}
+/* 💌 ENVELOPE */
+.envelope{width:160px;height:100px;background:#ffcdd2;position:relative;cursor:pointer;border-radius:6px;margin-top:30px}
+.flap{position:absolute;top:0;width:100%;height:50%;background:#f48fb1;clip-path:polygon(0 0,50% 100%,100% 0)}
+.letter{display:none;margin-top:20px;max-width:600px;font-size:18px;color:#6a1b9a}
 
-/* BENCH */
-.bench{
-  width:180px;
-  height:90px;
-  background:linear-gradient(#c89b6d,#8b5a2b);
-  border-radius:12px;
-  position:relative;
-  box-shadow:0 10px 0 #5a3e2b;
-  cursor:pointer;
-  transition:all 0.3s ease;
-}
+/* 🕊️ BIRDS */
+.bird{position:absolute;font-size:22px;animation:fly 3s linear forwards}
+@keyframes fly{to{transform:translate(200px,-200px);opacity:0}}
 
-.bench:hover{
-  transform:translateY(-6px);
-}
+/* 📖 DIARY */
+textarea{width:90%;max-width:600px;height:120px;border-radius:10px;padding:10px;border:1px solid #ccc;font-size:16px}
+.reply{margin-top:10px;background:#fce4ec;padding:10px;border-radius:10px}
 
-/* BENCH LEGS */
-.bench::before,
-.bench::after{
-  content:"";
-  position:absolute;
-  bottom:-30px;
-  width:22px;
-  height:30px;
-  background:#5a3e2b;
-  border-radius:0 0 6px 6px;
-}
+/* 🖼️ PHOTOS */
+.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px}
+.photo{height:140px;background:#f8bbd0;border-radius:12px;display:flex;align-items:center;justify-content:center}
 
-.bench::before{ left:18px; }
-.bench::after{ right:18px; }
-
-/* BENCH GLOW (MAGIC MEMORY) */
-.bench.active{
-  box-shadow:0 0 25px rgba(255,200,150,0.8),
-             0 10px 0 #5a3e2b;
-}
-
-/* STORY BOX */
-.story{
-  margin-top:40px;
-  width:90%;
-  max-width:700px;
-  min-height:120px;
-  background:rgba(255,255,255,0.6);
-  border-radius:15px;
-  padding:20px;
-  font-size:1.1rem;
-  line-height:1.6;
-  text-align:center;
-  box-shadow:0 8px 20px rgba(0,0,0,0.1);
-  opacity:0;
-  transform:translateY(20px);
-  transition:all 0.4s ease;
-}
-
-.story.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* FOOTNOTE */
-.footer{
-  margin-top:20px;
-  opacity:0.7;
-  font-size:0.95rem;
-}
-
-/* MOBILE */
-@media(max-width:600px){
-  .bench{
-    width:130px;
-    height:70px;
-  }
-}
+/* 🎶 MUSIC */
+audio{margin-top:20px}
 </style>
 </head>
 
 <body>
 
-<header>
-  🌸 The Classroom That Remembers 🌸
-</header>
+<!-- ❤️ Hearts -->
+<script>
+for(let i=0;i<25;i++){
+ let h=document.createElement("div");
+ h.className="heart";h.innerHTML="❤️";
+ h.style.left=Math.random()*100+"vw";
+ h.style.animationDelay=Math.random()*8+"s";
+ document.body.appendChild(h);
+}
+</script>
 
-<section class="classroom">
+<!-- 🔐 LOCK -->
+<section>
+  <div class="lock" onclick="unlock()">🔒</div>
+  <div>Tap to unlock our story</div>
+  <div class="kiss" id="kiss">💋</div>
+</section>
 
-  <div class="row">
-    <div class="bench" data-story="That first bench… where silence felt louder than words."></div>
-    <div class="bench" data-story="We sat here pretending to listen, but noticing only each other."></div>
+<!-- 🪑 BENCH -->
+<section>
+  <h2>That Tuition Class</h2>
+  <div class="scene">
+    <div class="desk"></div><div class="bench"></div>
+    <div class="person boy"><div class="hand"></div></div>
+    <div class="person girl"><div class="hand"></div></div>
   </div>
+  <p>Sometimes the class was empty. We sat together — silently loud.</p>
+</section>
 
-  <div class="row">
-    <div class="bench" data-story="This bench knows about stolen glances and shy smiles."></div>
-    <div class="bench" data-story="Someone carved initials here. The chalk erased them, but not the feeling."></div>
+<!-- 💌 ENVELOPE -->
+<section>
+  <h2>A Letter For You</h2>
+  <div class="envelope" onclick="openLetter()">
+    <div class="flap"></div>
   </div>
-
-  <div class="row">
-    <div class="bench" data-story="Rain outside. Notes unfinished. Hearts loud."></div>
-    <div class="bench" data-story="If benches could speak, this one would blush first."></div>
+  <div class="letter" id="letter">
+    My love, every day I choose you again.<br>
+    You are my calm and my chaos 🤍
   </div>
+</section>
 
-  <div id="storyBox" class="story"></div>
+<!-- 📖 DIARY -->
+<section>
+  <h2>Today I Felt…</h2>
+  <textarea placeholder="Write your feelings today…"></textarea>
+  <div class="reply">Her reply will live here 🤍</div>
+</section>
 
-  <div class="footer">
-    Click a bench. Let it remember.
+<!-- 🖼️ PHOTOS -->
+<section>
+  <h2>Memories</h2>
+  <div class="photos">
+    <div class="photo">Photo 1</div>
+    <div class="photo">Photo 2</div>
+    <div class="photo">Photo 3</div>
+    <div class="photo">Photo 4</div>
   </div>
+</section>
 
+<!-- 🎶 MUSIC -->
+<section>
+  <h2>Our Song</h2>
+  <audio controls>
+    <source src="assets/music.mp3" type="audio/mpeg">
+  </audio>
 </section>
 
 <script>
-const benches = document.querySelectorAll(".bench");
-const storyBox = document.getElementById("storyBox");
-
-benches.forEach(bench=>{
-  bench.addEventListener("click",()=>{
-    benches.forEach(b=>b.classList.remove("active"));
-    bench.classList.add("active");
-
-    const text = bench.getAttribute("data-story");
-    storyBox.textContent = text;
-    storyBox.classList.add("show");
-  });
-});
+function unlock(){
+ document.getElementById("kiss").style.display="block";
+}
+function openLetter(){
+ document.getElementById("letter").style.display="block";
+ for(let i=0;i<5;i++){
+   let b=document.createElement("div");
+   b.className="bird";b.innerHTML="🕊️";
+   b.style.left="50%";b.style.top="50%";
+   document.body.appendChild(b);
+ }
+}
 </script>
 
 </body>
