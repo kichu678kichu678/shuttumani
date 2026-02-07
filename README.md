@@ -1,211 +1,37 @@
 index.html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>❤️</title>
-
+<title>Test</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Georgia,serif}
-body{
-  background:#000;
-  color:#fff;
-  height:100vh;
-  overflow:hidden;
-}
-
-/* ---------- LOCK SCREEN ---------- */
+body{margin:0;background:black;color:white;height:100vh}
 #lock{
-  position:fixed;
-  inset:0;
-  background:#000;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  z-index:5;
-}
-#lock h2{margin-bottom:15px}
-#lock input{
-  padding:10px;
-  font-size:18px;
-  text-align:center;
-  border:none;
-  border-radius:6px;
-}
-#lock button{
-  margin-top:15px;
-  padding:10px 30px;
-  font-size:16px;
-  border:none;
-  border-radius:6px;
-  background:#ff4d6d;
-  color:#fff;
-}
-
-/* ---------- MAIN ---------- */
-#main{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:linear-gradient(#000,#1a001a);
-  flex-direction:column;
   align-items:center;
-  justify-content:center;
+  height:100vh;
 }
-
-/* popup */
-#popup{
-  font-size:22px;
-  margin-bottom:25px;
-  animation:fade 4s forwards;
-}
-@keyframes fade{
-  0%{opacity:0}
-  20%{opacity:1}
-  80%{opacity:1}
-  100%{opacity:0}
-}
-
-/* envelope */
-#envelope{
-  width:150px;
-  height:100px;
-  background:#8b0000;
-  border-radius:8px;
-  position:relative;
-  cursor:pointer;
-}
-#envelope::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:55%;
-  background:#a00000;
-  clip-path:polygon(0 0,50% 65%,100% 0);
-}
-
-/* hearts */
-.heart{
-  position:fixed;
-  bottom:-20px;
-  color:#ff4d6d;
-  animation:float 6s linear infinite;
-}
-@keyframes float{
-  from{transform:translateY(0);opacity:1}
-  to{transform:translateY(-110vh);opacity:0}
-}
-
-/* ---------- LETTER ---------- */
-#letter{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#0b0010;
-  flex-direction:column;
-}
-
-#content{
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
-  line-height:1.9;
-  -webkit-overflow-scrolling:touch;
-}
-
-#back{
-  padding:14px;
-  text-align:center;
-  background:#300020;
-  font-size:18px;
-}
+input{padding:10px;font-size:18px}
+button{padding:10px;margin-top:10px}
 </style>
 </head>
-
 <body>
 
-<!-- MUSIC -->
-<audio id="music" loop>
-  <source src="https://files.catbox.moe/8y1n6v.mp3">
-</audio>
-
-<!-- LOCK -->
 <div id="lock">
-  <h2>Enter Password</h2>
-  <input id="pass" placeholder="DDMMYYYY">
-  <button onclick="unlock()">Unlock</button>
-</div>
-
-<!-- MAIN -->
-<div id="main">
-  <div id="popup">ammede ponnu araaaa 💋</div>
-  <div id="envelope"></div>
-</div>
-
-<!-- LETTER -->
-<div id="letter">
-  <div id="content">
-
-<p>eth nee appozha vayika ennu arayillla Appozhayalum vayikulooo ninthe first Valentine's Day annu ennu okke ariyaaa nee annu tution nu varo ennu polum arayilla ethu Azhuthumbo pinne ollathu exam okke alle ath Kazhinja kanan polum pattillalo appo enth cheyyum nee vallathum aloichu vechit indooo vaveee enthe oru idea il korach okkee indu ath Njan parayaneee pinne kali akkanda ketta Njan romantic alla ennu paranju nee enthe eduth ethuuu matte parayana oru dhivasam varum daaaa nokkikooo pinne entha sugalle engane okke nadanna mathiyooo vellapozhum enne kurich okke ortholu tta marannu povaruthu nammal mindandu aya entha indava ponnah enthayalum nammal kanum enganelum okke enthelum mindum athokke orapa pinne ammede ponnu aradaaaa 😘🩷❤️💋🫂</p>
-
-<p>exam kazhinju graduation nu enthavavo kalikan poovanel ninak ath scn avum ennu enik ariyaaaaa bhaki Allavarum adipoli ayit avide erikumbo enthe ponnu matharam blaa blaaa blaaaa enthaleeeee nja. Avide annelum ninthe thanne alledaaaaaa enthokke aleeeeee eni korach serious ayit paraya</p>
-
-<p>Atheeee enik ninne bhayankara ishtam a neee yes parayo ennu arayilla ennalum enik entho parayanam ennu thooni neee Chilappo enne angane kandit undavilla ennalum Njan eth eni paranjillel eni annelum eth parayumbo annu paranjel Njan yes paranjene ennu nee Paranja enik veshamam avummm atha eppo parayane enik ninne bhayankara ishtam a</p>
-
-<p style="text-align:center;font-size:22px;margin:20px 0;"><strong>I Love You ❤️</strong></p>
-
-<p>Nee ethinu rply thannolu Chilappo eth kelkumbo nee ennod eni mindi ennu varilla angane onnum venda tta ishtam allel ath Paranja mathi scn ella eppo ishtam annu paranju ennu vech kozhapam ellata nammal pazhayath pole thanne veliya vethasam onnum ella nammal thammil ethra kollam ayit ariyaaa pinne angotum engotum ariyathathu onnum ellanu vekkanu</p>
-
-<p>Ninak enne ishtam anno ennu arayilla eni eth parayumbozhano athine kurich aloikane ennu polum arayilla enth okke annelum neee enthe koode indel adipoli avum ennu thooni athokke thanne prethekish onnum ella</p>
-
-<p>ethokke thanne appo aloichu okke paranjolu tta eppo ninne ishtapedan Karanam ennu okke choicha nee nalla kochanu mariyathak okke nokkum enthelum okke ninnod Paranja nee avide veenolum veliya scn onnnum ella oru kidilan kocha neee</p>
-
-<p>athranne pinne elle enthokke okke vannalum 10 kazhinju pooyalum scn onnum indavalle tta enik ninnod olla ishtam poovilla enik aennum nee enthe koch thanneya</p>
-
-<p>Neeyum poovilla ennu Njan vishwosikunnu sharkareee. Aloichu okke eni paranjolu tta</p>
-
-<p style="text-align:center;font-size:22px;margin:30px 0;"><strong>Appo veendum paraya I LOVE YOU ❤️</strong></p>
-
-  </div>
-  <div id="back" onclick="goBack()">← Back</div>
+  <h2>LOCK SCREEN</h2>
+  <input id="p" placeholder="Enter password">
+  <button onclick="go()">Unlock</button>
 </div>
 
 <script>
-function unlock(){
-  if(document.getElementById("pass").value==="01032025"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("main").style.display="flex";
-    document.getElementById("music").play();
-    hearts();
+function go(){
+  if(document.getElementById("p").value==="01032025"){
+    alert("Unlocked");
   }
-}
-
-function hearts(){
-  for(let i=0;i<20;i++){
-    let h=document.createElement("div");
-    h.className="heart";
-    h.innerHTML="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=12+Math.random()*16+"px";
-    document.body.appendChild(h);
-  }
-}
-
-document.getElementById("envelope").onclick=function(){
-  document.getElementById("main").style.display="none";
-  document.getElementById("letter").style.display="flex";
-}
-
-function goBack(){
-  document.getElementById("letter").style.display="none";
-  document.getElementById("main").style.display="flex";
 }
 </script>
 
 </body>
 </html>
-
