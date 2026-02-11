@@ -61,16 +61,64 @@ button {
   50% { opacity: 1; }
   100% { top: -10%; opacity: 0; }
 }
+.envelope {
+  position: relative;
+  width: 220px;
+  height: 150px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
+.body {
+  width: 100%;
+  height: 100%;
+  background: #e75480;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.flap {
+  width: 0;
+  height: 0;
+  border-left: 110px solid transparent;
+  border-right: 110px solid transparent;
+  border-bottom: 75px solid #ff6fa5;
+  position: absolute;
+  top: -75px;
+  transition: transform 0.8s ease;
+  transform-origin: bottom;
+}
+
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+
+.tapText {
+  position: absolute;
+  bottom: -40px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+  
 </style>
 </head>
 
 <body>
 
 <!-- PAGE 1 -->
-<div id="lockPage" class="page active" style="background:black; overflow:hidden;">
+<div id="envelopePage" class="page" style="background:#111;">
 
-  <div class="hearts"></div>
+  <div class="envelope" onclick="openEnvelope()">
+    <div class="flap"></div>
+    <div class="body"></div>
+    <p class="tapText">Tap to open 💌</p>
+  </div>
+
+</div>
+
 
   <h2 id="introText" style="opacity:0; transition:2s; text-align:center;">
     ammede ponnu araaa 💋💋
@@ -132,7 +180,15 @@ function checkPassword() {
     alert("Wrong password 💔");
   }
 }
-  
+function openEnvelope() {
+  var env = document.querySelector(".envelope");
+  env.classList.add("open");
+
+  setTimeout(function() {
+    show('letterPage');
+  }, 800);
+}
+
 </script>
 
 </body>
