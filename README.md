@@ -292,6 +292,65 @@ index.html
   line-height:1.9;
   opacity:.95;
           }
+  /* Surprise Page */
+.surpriseBox{
+  max-width:900px;
+  margin:0 auto;
+  background:#0f0f0f;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+}
+
+.gift{
+  font-size:64px;
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+  animation:giftBounce 1.6s ease-in-out infinite;
+}
+
+@keyframes giftBounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
+
+.revealText{
+  display:none;
+  margin-top:16px;
+  padding:14px;
+  background:#111;
+  border-radius:12px;
+  border:1px solid #222;
+  line-height:1.8;
+  opacity:.95;
+  text-align:left;
+}
+
+.sparkle{
+  font-size:22px;
+  text-align:center;
+  margin:8px 0;
+  opacity:.95;
+}
+
+.loveRow{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-top:12px;
+}
+
+.loveChip{
+  background:#111;
+  border:1px solid #2a2a2a;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:14px;
+  opacity:.9;
+                    }
 </style>
 </head>
 
@@ -398,6 +457,7 @@ index.html
 
     <div style="margin-top:18px;">
       <button class="btnDark" onclick="show('diaryPage')">Back 📖</button>
+      <button onclick="show('surprisePage')">Surprise ✨</button>
     </div>
   </div>
 </div>
@@ -522,7 +582,56 @@ index.html
   </div>
 </div>
 </div>
+<div id="surprisePage" class="page scrollPage">
+  <h2 class="title" style="color:#ff4d88;">A Small Surprise ✨</h2>
+
+  <div class="surpriseBox">
+    <p style="opacity:.9;margin-top:0;">
+      I kept something special for you here…  
+      Tap the gift 🎁
+    </p>
+
+    <div class="gift" onclick="openSurprise()">🎁</div>
+
+    <div id="hiddenSurprise" class="revealText">
+      <div class="sparkle">✨💖✨</div>
+
+      <p>
+        I don’t know how the future will look…  
+        but I know one thing:  
+        you became a very special part of my heart.
+      </p>
+
+      <p>
+        Even on days when we don’t talk much,  
+        you’ll still be in my thoughts.  
+        You are my comfort, my peace, my favourite feeling. 💗
+      </p>
+
+      <div class="loveRow">
+        <div class="loveChip">You are my peace 🌙</div>
+        <div class="loveChip">You are my comfort 💗</div>
+        <div class="loveChip">You are my happiness 🥹</div>
+      </div>
+
+      <p style="margin-top:12px;">
+        And one more thing…  
+        no matter what… I’m proud of you. Always. ❤️
+      </p>
+
+      <div class="sparkle">✨ I Love You ✨</div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <button class="btnDark" onclick="show('optionsPage')">Back 🌙</button>
+    </div>
+  </div>
+</div>
 <script>
+  function openSurprise(){
+  const box = document.getElementById("hiddenSurprise");
+  if(box) box.style.display = "block";
+}
 function show(pageId){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const page = document.getElementById(pageId);
@@ -570,5 +679,37 @@ setInterval(()=>{
     const diff = Date.now() - target;
     const days = Math.floor(diff / (1000*60*60*24));
     const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-    const mins = Math.floor((diff % (1000*60*60)) / (1000
+    const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const secs = Math.floor((diff % (1000*60)) / 1000);
+    const el = document.getElementById("countdownTimer");
+    if(el) el.innerHTML = `${days} days 💕 ${hours} hrs 💕 ${mins} mins 💕 ${secs} sec together`;
+  },1000);
+})();
+(function buildGallery(){
+  const grid = document.getElementById("galleryGrid");
+  if(!grid) return;
+
+  for(let i=1; i<=50; i++){
+    const card = document.createElement("div");
+    card.className = "photoCard";
+
+    // placeholder image (works even if you don't add photos yet)
+    const img = document.createElement("img");
+    img.alt = "Photo " + i;
+    img.src = `https://picsum.photos/seed/shuttumani_${i}/500/500`;
+
+    const cap = document.createElement("div");
+    cap.className = "photoCap";
+    cap.innerHTML = `💗 Photo ${i}`;
+
+    card.appendChild(img);
+    card.appendChild(cap);
+    grid.appendChild(card);
+  }
+})();
+</script>
+
+</body>
+</html>
+
 
