@@ -17,20 +17,31 @@ index.html
             align-items: center;
         }
 
-        /* --- LOCK SCREEN (Step 1) --- */
         #lock-screen {
             position: fixed; width: 100%; height: 100%;
             background: white; z-index: 1000;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
         }
+        #lock-screen h2 { color: #ff4d6d; }
         #lock-screen input {
             padding: 15px; font-size: 1.2rem;
             border: 2px solid #ff4d6d; border-radius: 50px;
             text-align: center; outline: none; width: 250px;
+            margin-bottom: 20px;
+        }
+        
+        /* Added Button Style */
+        #enterBtn {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
         }
 
-        /* --- POPUP MESSAGE (Step 2) --- */
         #popup-msg {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: white;
@@ -46,7 +57,8 @@ index.html
 
     <div id="lock-screen">
         <h2>Enter Code ❤️</h2>
-        <input type="password" id="passInput" placeholder="DDMMYYYY" oninput="checkPassword()">
+        <input type="password" id="passInput" placeholder="DDMMYYYY">
+        <button id="enterBtn" onclick="checkPassword()">Enter</button>
     </div>
 
     <div id="popup-msg">ammede ponnu araaa💋💋</div>
@@ -62,29 +74,24 @@ index.html
     <script>
         function checkPassword() {
             const input = document.getElementById('passInput').value;
-            // The password check
+            
             if (input === "01032025") {
                 document.getElementById('lock-screen').style.display = 'none';
                 const popup = document.getElementById('popup-msg');
                 popup.style.display = 'flex';
                 
-                // Play music
+                // Play music after interaction
                 const music = document.getElementById('bgMusic');
-                music.play().catch(()=>{});
+                music.play().catch(e => console.log(e));
                 
-                // Show popup for 3 seconds then load content
                 setTimeout(() => {
                     popup.style.display = 'none';
                     document.getElementById('main-content').style.display = 'block';
                 }, 3000);
+            } else {
+                alert("Incorrect Password");
             }
         }
     </script>
 </body>
 </html>
-
-
-
-
-
-
