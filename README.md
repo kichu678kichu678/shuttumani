@@ -133,14 +133,18 @@ function show(page){
 }
 
 function checkPassword(){
-  var input=document.getElementById("passwordInput").value;
-  if(input==="01032025"){
-    document.getElementById("bgMusic").play();
-    show("envelopePage");
-  }else{
-    alert("Wrong password 💔");
+  const entered = document.getElementById("passwordInput").value.trim();
+
+  if(entered === "01032025"){
+    const music = document.getElementById("bgMusic");
+    if(music) music.play().catch(()=>{});
+
+    show("envelopePage");   // ✅ ONLY THIS
+  } else {
+    alert("Wrong date 💔");
   }
 }
+  
 
 function openLetter(){
   show("letterPage");
