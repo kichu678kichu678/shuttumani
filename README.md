@@ -1352,16 +1352,33 @@ index.html
     if(page && page.classList.contains("scrollPage")) page.scrollTop = 0;
   }
 
-  function checkPassword(){
-    const entered = document.getElementById("passwordInput").value.trim();
-    if(entered === "01032025"){
-      const music = document.getElementById("bgMusic");
-      if(music) music.play().catch(()=>{});
-      show("envelopePage");
-    } else {
-      alert("Wrong date 💔");
+function checkPassword(){
+  const raw = document.getElementById("passwordInput").value || "";
+
+  // keep only digits so: "01 03 2025" -> "01032025"
+  const entered = raw.replace(/\D/g, "");
+
+  if(entered === "01032025"){
+    const music = document.getElementById("bgMusic");
+    if(music){
+      music.volume = 0.75;
+      music.play().catch(()=>{});
     }
+
+    const overlay = document.getElementById("welcomeOverlay");
+    if(overlay){
+      overlay.classList.add("show");
+      setTimeout(() => {
+        overlay.classList.remove("show");
+        show("envelopePage");   // ✅ make sure envelopePage exists
+      }, 1600);
+    } else {
+      show("envelopePage");
+    }
+  } else {
+    alert("Wrong date 💔");
   }
+}
 
   function openLetter(){
     const env = document.querySelector(".newEnvelope");
