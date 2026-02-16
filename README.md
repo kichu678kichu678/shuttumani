@@ -359,18 +359,36 @@ index.html<!doctype html>
       }
     });
     type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-messaging.js";
 
 const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
+  apiKey: "AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
+  authDomain: "shuttumani-chat.firebaseapp.com",
+  projectId: "shuttumani-chat",
+  storageBucket: "shuttumani-chat.firebasestorage.app",
+  messagingSenderId: "1033302224383",
+  appId: "1:1033302224383:web:952bdfed407ab257cf0bca"
 };
 
 const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
-const VAPID_KEY = "BKHV-MJW8zHzv928ii7SjXSzX7wue7O9aoCLRXwYi65_Yi0HzPmKJvy977JSDPXsmk3tPUgjUEwq9hdNGwQ6bG8
+Notification.requestPermission().then((permission) => {
+  if (permission === "granted") {
+    getToken(messaging, {
+      vapidKey: "BKhV-MJW8zHzv928ii7SjXSzX7wue7O9aoCLRXwYi65_YiOHzPmKJvy977JSDPXsmk3tPUGjUEwq9hdNGwQ6bG8"
+    }).then((token) => {
+      console.log("Token:", token);
+    });
+  }
+});
+
+onMessage(messaging, (payload) => {
+  new Notification("💌 New message", {
+    body: payload.notification.body
+  });
+});
   </script>
 </body>
 </html>
