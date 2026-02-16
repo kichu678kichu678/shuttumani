@@ -1,103 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>🔒 Shuttumani Private Chat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shuttumani 💗</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:linear-gradient(135deg,#0a0a0a,#1a0033,#000);
+background:linear-gradient(180deg,#000,#0a0a0a);
 color:white;
+overflow:hidden;
 }
 
-.center{
+/* page system */
+.page{
+position:fixed;
+inset:0;
+display:none;
+}
+
+.active{
 display:flex;
+}
+
+/* lock screen */
+#lockPage{
 justify-content:center;
 align-items:center;
-height:100vh;
-flex-direction:column;
+background:radial-gradient(circle,#111,#000);
 }
 
-.box{
-background:rgba(255,255,255,0.05);
-padding:25px;
-border-radius:15px;
-width:90%;
-max-width:400px;
-backdrop-filter:blur(10px);
+.lockBox{
+background:#111;
+padding:35px;
+border-radius:20px;
+box-shadow:0 0 40px rgba(255,77,166,0.4);
+text-align:center;
+}
+
+.lockTitle{
+font-size:28px;
+margin-bottom:15px;
+color:#ff4da6;
 }
 
 input{
-width:100%;
-padding:12px;
-margin:8px 0;
-border-radius:10px;
+padding:14px;
+border-radius:12px;
 border:none;
-background:rgba(255,255,255,0.1);
+font-size:18px;
+text-align:center;
+width:220px;
+background:#222;
 color:white;
 }
 
-button{
-padding:12px;
-border:none;
-border-radius:10px;
-background:linear-gradient(45deg,#ff0080,#ff66cc);
-color:white;
-width:100%;
-margin-top:10px;
+/* chat page */
+#chatPage{
+flex-direction:column;
+}
+
+/* header */
+.header{
+display:flex;
+align-items:center;
+gap:10px;
+padding:15px;
+background:#0f0f0f;
+border-bottom:1px solid #222;
+}
+
+.avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:#ff4da6;
+display:flex;
+align-items:center;
+justify-content:center;
 font-weight:bold;
 }
 
-#chatPage{
-display:none;
-padding:15px;
+.userInfo{
+flex:1;
 }
 
-#messages{
-height:60vh;
-overflow:auto;
-border-radius:10px;
-padding:10px;
-background:rgba(255,255,255,0.05);
+.name{
+font-size:18px;
+}
+
+.status{
+font-size:13px;
+color:#aaa;
+}
+
+/* online dot */
+.dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#0f0;
+display:inline-block;
+margin-right:5px;
+box-shadow:0 0 8px #0f0;
+}
+
+/* messages */
+.messages{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:flex;
+flex-direction:column;
+gap:10px;
 }
 
 .msg{
-background:#ff008055;
-padding:10px;
-margin:5px;
-border-radius:10px;
+padding:12px 16px;
+border-radius:14px;
+max-width:70%;
+animation:fadeIn 0.3s;
 }
 
-.top{
+.me{
+background:#ff4da6;
+align-self:flex-end;
+}
+
+.her{
+background:#222;
+align-self:flex-start;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* typing */
+.typing{
+font-size:13px;
+color:#aaa;
+padding-left:15px;
+height:20px;
+}
+
+/* input */
+.inputArea{
 display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
+gap:10px;
+padding:10px;
+background:#0f0f0f;
 }
 
-.online{
-color:#00ff88;
-font-weight:bold;
+.inputArea input{
+flex:1;
+}
+
+button{
+padding:14px 25px;
+border:none;
+border-radius:12px;
+background:#ff4da6;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+/* floating hearts */
+.heart{
+position:fixed;
+bottom:-10px;
+animation:float 6s linear infinite;
+color:#ff4da6;
+}
+
+@keyframes float{
+from{transform:translateY(0);}
+to{transform:translateY(-110vh);}
 }
 
 </style>
-</head>
 
+</head>
 <body>
 
-<!-- UNLOCK PAGE -->
+<!-- LOCK PAGE -->
+<div id="lockPage" class="page active">
 
-<div id="unlockPage" class="center">
+<div class="lockBox">
 
-<div class="box">
+<div class="lockTitle">
+Shuttumani 💗
+</div>
 
-<h2>🔒 Secret Unlock</h2>
+<input id="password" placeholder="Enter date">
 
-<input id="secretInput" placeholder="Enter secret word">
+<br><br>
 
 <button onclick="unlock()">Unlock</button>
 
@@ -105,241 +208,166 @@ font-weight:bold;
 
 </div>
 
-<!-- LOGIN PAGE -->
-
-<div id="loginPage" class="center" style="display:none">
-
-<div class="box">
-
-<h2>Login ❤️</h2>
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-
-<button onclick="enableNotifications()">Enable Notifications</button>
-
-</div>
-
-</div>
 
 <!-- CHAT PAGE -->
+<div id="chatPage" class="page">
 
-<div id="chatPage">
+<!-- header -->
+<div class="header">
 
-<div class="top">
+<div class="avatar">
+S
+</div>
 
-<h3>Our Room 💬</h3>
+<div class="userInfo">
 
-<div id="status" class="online">Offline</div>
+<div class="name">
+Shuttumani
+</div>
 
-<button onclick="logout()">Logout</button>
+<div class="status">
+<span class="dot"></span>Online
+</div>
 
 </div>
 
-<div id="messages"></div>
+</div>
 
-<input id="msgInput" placeholder="Type message">
 
-<button onclick="sendMessage()">Send</button>
+<!-- messages -->
+<div id="messages" class="messages">
+</div>
+
+<div id="typing" class="typing"></div>
+
+
+<!-- input -->
+<div class="inputArea">
+
+<input id="msgInput"
+placeholder="Type message..."
+oninput="typing()"
+onkeydown="if(event.key==='Enter') send()">
+
+<button onclick="send()">Send</button>
 
 </div>
 
-<!-- FIREBASE + CHAT SCRIPT -->
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-
-import {
-getAuth,
-signInWithEmailAndPassword,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-query,
-orderBy,
-onSnapshot,
-serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-import {
-getMessaging,
-getToken,
-onMessage
-}
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-messaging.js";
-
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
-
-authDomain: "shuttumani-chat.firebaseapp.com",
-
-projectId: "shuttumani-chat",
-
-storageBucket: "shuttumani-chat.firebasestorage.app",
-
-messagingSenderId: "1033302224383",
-
-appId: "1:1033302224383:web:952bdfed407ab257cf0bca"
-
-};
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth();
-
-const db = getFirestore();
-
-const messaging = getMessaging(app);
-
-
-window.unlock = function(){
-
-const secret="ammede ponnu njana";
-
-const input=document.getElementById("secretInput").value;
-
-if(input===secret){
-
-document.getElementById("unlockPage").style.display="none";
-
-document.getElementById("loginPage").style.display="flex";
-
-}else{
-
-alert("Wrong secret");
-
-}
-
-}
-
-
-window.login = function(){
-
-const email=document.getElementById("email").value;
-
-const pass=document.getElementById("password").value;
-
-signInWithEmailAndPassword(auth,email,pass)
-
-.then(()=>{})
-
-.catch(()=>alert("Login failed"));
-
-}
-
-
-onAuthStateChanged(auth,user=>{
-
-if(user){
-
-document.getElementById("loginPage").style.display="none";
-
-document.getElementById("chatPage").style.display="block";
-
-document.getElementById("status").innerText="Online";
-
-loadMessages();
-
-}
-
-});
-
-
-window.logout=function(){
-
-signOut(auth);
-
-location.reload();
-
-}
-
-
-window.sendMessage=async function(){
-
-const text=document.getElementById("msgInput").value;
-
-if(text==="")return;
-
-await addDoc(collection(db,"messages"),{
-
-text:text,
-
-user:auth.currentUser.email,
-
-time:serverTimestamp()
-
-});
-
-document.getElementById("msgInput").value="";
-
-}
-
-
-function loadMessages(){
-
-const q=query(collection(db,"messages"),orderBy("time"));
-
-onSnapshot(q,snap=>{
-
-const div=document.getElementById("messages");
-
-div.innerHTML="";
-
-snap.forEach(doc=>{
-
-const d=doc.data();
-
-div.innerHTML+=`
-
-<div class="msg">
-
-${d.text}
-
-<br>
-
-<small>${d.user}</small>
-
 </div>
 
-`;
 
-});
+<audio id="sound">
+<source src="https://www.soundjay.com/buttons/sounds/button-3.mp3">
+</audio>
 
-});
+
+<script>
+
+/* PASSWORD */
+const PASSWORD="01032025";
+
+
+function unlock(){
+
+const input=document.getElementById("password").value;
+
+if(input===PASSWORD){
+
+show("chatPage");
+
+}
+else{
+
+alert("Wrong date 💔");
+
+}
 
 }
 
 
-window.enableNotifications=async function(){
+/* show page */
+function show(id){
 
-const permission=await Notification.requestPermission();
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 
-if(permission==="granted"){
-
-alert("Notifications enabled");
-
-}
+document.getElementById(id).classList.add("active");
 
 }
 
 
-onMessage(messaging,(payload)=>{
+/* send message */
+function send(){
 
-new Notification("New message ❤️");
+const input=document.getElementById("msgInput");
 
-});
+const text=input.value.trim();
+
+if(!text) return;
+
+addMsg(text,"me");
+
+input.value="";
+
+document.getElementById("typing").innerText="";
+
+document.getElementById("sound").play();
+
+}
+
+
+/* add message */
+function addMsg(text,type){
+
+const div=document.createElement("div");
+
+div.className="msg "+type;
+
+div.innerText=text;
+
+document.getElementById("messages").appendChild(div);
+
+scroll();
+
+}
+
+
+function scroll(){
+
+document.getElementById("messages").scrollTop=999999;
+
+}
+
+
+/* typing indicator */
+function typing(){
+
+document.getElementById("typing").innerText="Typing...";
+
+clearTimeout(window.typingTimer);
+
+window.typingTimer=setTimeout(()=>{
+document.getElementById("typing").innerText="";
+},1000);
+
+}
+
+
+/* floating hearts */
+setInterval(()=>{
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+
+heart.innerText="💗";
+
+heart.style.left=Math.random()*100+"%";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),6000);
+
+},700);
 
 </script>
 
