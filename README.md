@@ -79,9 +79,16 @@
     <div id="loginError" style="opacity:.9;color:#ffb3d9;min-height:18px;"></div>
   </div>
 </div>
-
+<div id="loginPage" class="page active">
+  <div class="center">
+    <h1>Private Chat 💬</h1>
+    <input id="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Unlock</button>
+  </div>
+</div>
 <!-- STEP 1C: CHAT -->
-<div id="chatPage" class="page">
+<div id="chatPage" style="display:none;">
   <div class="header">
     <div class="who">
       <div class="title">Shuttumani 💗 Chat</div>
@@ -234,6 +241,34 @@
       statusText.textContent = "Not logged in";
     }
   });
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+const auth = getAuth();
+
+function login(){
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(auth, email, pass)
+  .then(()=>{
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("chatPage").style.display="block";
+  })
+  .catch(()=>{
+    alert("Wrong login");
+  });
+}
+
+onAuthStateChanged(auth, (user)=>{
+  if(user){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("chatPage").style.display="block";
+  }else{
+    document.getElementById("loginPage").style.display="block";
+    document.getElementById("chatPage").style.display="none";
+  }
+});
 </script>
 
 </body>
