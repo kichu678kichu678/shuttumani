@@ -10,24 +10,35 @@
   .page{position:fixed;inset:0;display:none;}
   .page.active{display:flex;}
 
-  /* Lock + Login */
-  .center{height:100%;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:18px;box-sizing:border-box;text-align:center;}
-  h1{margin:0;color:#ff4da6;}
+  .center{
+    height:100%;width:100%;
+    display:flex;flex-direction:column;
+    justify-content:center;align-items:center;
+    gap:12px;padding:18px;box-sizing:border-box;
+    text-align:center;
+  }
+
+  h1{margin:0;color:#ff4da6;letter-spacing:.3px;}
   .hint{opacity:.85;max-width:520px;line-height:1.5;}
   input{
-    padding:14px;font-size:18px;border:none;border-radius:12px;width:min(340px,85vw);
-    text-align:center;outline:none;background:#111;color:#fff;border:1px solid #222;
+    padding:14px;font-size:18px;border:none;border-radius:12px;
+    width:min(340px,85vw);text-align:center;outline:none;
+    background:#111;color:#fff;border:1px solid #222;
   }
-  button{padding:14px 22px;font-size:18px;border:none;border-radius:12px;background:#ff4da6;color:#fff;cursor:pointer;}
+  button{
+    padding:14px 22px;font-size:18px;border:none;border-radius:12px;
+    background:#ff4da6;color:#fff;cursor:pointer;
+  }
   .btnDark{background:#222;border:1px solid #333;}
+  .err{min-height:18px;color:#ffb3d9;opacity:.95;}
 
-  /* Chat */
+  /* Chat UI */
   #chatPage{flex-direction:column;}
   .header{
     height:66px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;
     background:#0f0f0f;border-bottom:1px solid #222;box-sizing:border-box;
   }
-  .who{display:flex;flex-direction:column;gap:2px;}
+  .who{display:flex;flex-direction:column;gap:2px;text-align:left;}
   .title{font-size:18px;}
   .status{font-size:13px;opacity:.85;color:#bbb;}
   #messages{
@@ -50,7 +61,7 @@
 
 <body>
 
-<!-- STEP 1A: LOCK -->
+<!-- LOCK -->
 <div id="lockPage" class="page active">
   <div class="center">
     <h1>Private 💗</h1>
@@ -63,11 +74,11 @@
   </div>
 </div>
 
-<!-- STEP 1B: LOGIN -->
+<!-- LOGIN -->
 <div id="loginPage" class="page">
   <div class="center">
     <h1>Login 💌</h1>
-    <div class="hint">Only you two can enter. (Email + Password)</div>
+    <div class="hint">Only you two can enter.</div>
 
     <input id="email" type="email" placeholder="Email" autocomplete="off">
     <input id="password" type="password" placeholder="Password" autocomplete="off"
@@ -76,19 +87,12 @@
     <button type="button" onclick="login()">Enter Chat</button>
     <button type="button" class="btnDark" onclick="show('lockPage')">Back</button>
 
-    <div id="loginError" style="opacity:.9;color:#ffb3d9;min-height:18px;"></div>
+    <div id="loginError" class="err"></div>
   </div>
 </div>
-<div id="loginPage" class="page active">
-  <div class="center">
-    <h1>Private Chat 💬</h1>
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
-    <button onclick="login()">Unlock</button>
-  </div>
-</div>
-<!-- STEP 1C: CHAT -->
-<div id="chatPage" style="display:none;">
+
+<!-- CHAT -->
+<div id="chatPage" class="page">
   <div class="header">
     <div class="who">
       <div class="title">Shuttumani 💗 Chat</div>
@@ -107,12 +111,12 @@
 </div>
 
 <script type="module">
-  // ✅ Stable Firebase Web SDK (modular)
+  // Firebase SDK (stable)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
   import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  // ✅ Your config (as you pasted)
+  // ✅ Your Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
     authDomain: "shuttumani-chat.firebaseapp.com",
@@ -126,7 +130,7 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // ---------- Page system ----------
+  // Page switch
   window.show = function(pageId){
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
     const el = document.getElementById(pageId);
@@ -135,13 +139,14 @@
     window.scrollTo(0,0);
   };
 
+  // Lock
   window.unlock = function(){
     const pass = document.getElementById("lockPass").value.trim();
     if(pass === "01032025") show("loginPage");
     else alert("Wrong date 💔");
   };
 
-  // ---------- Auth ----------
+  // Login / Logout
   const loginError = document.getElementById("loginError");
 
   window.login = async function(){
@@ -152,7 +157,7 @@
 
     try{
       await signInWithEmailAndPassword(auth, email, pw);
-      // onAuthStateChanged will move to chat
+      // onAuthStateChanged will open chat
     }catch(e){
       loginError.textContent = e?.message || "Login failed";
     }
@@ -163,7 +168,7 @@
     show("loginPage");
   };
 
-  // ---------- Chat ----------
+  // Chat
   const messagesEl = document.getElementById("messages");
   const statusText = document.getElementById("statusText");
   const msgInput = document.getElementById("msgInput");
@@ -198,9 +203,7 @@
 
     unsub = onSnapshot(q, (snap)=>{
       messagesEl.innerHTML = "";
-      snap.forEach(doc=>{
-        renderMsg(doc.data(), myUid);
-      });
+      snap.forEach(doc => renderMsg(doc.data(), myUid));
       scrollBottom();
     }, (err)=>{
       statusText.textContent = "Firestore error (check rules) ⚠️";
@@ -230,7 +233,7 @@
     }
   };
 
-  // ---------- Auth state ----------
+  // ✅ Important: stop direct opening
   onAuthStateChanged(auth, (user)=>{
     if(user){
       show("chatPage");
@@ -238,37 +241,10 @@
       startListening(user.uid);
     }else{
       if(unsub) unsub();
-      statusText.textContent = "Not logged in";
+      // ALWAYS go lock first (not chat)
+      show("lockPage");
     }
   });
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
-const auth = getAuth();
-
-function login(){
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
-
-  signInWithEmailAndPassword(auth, email, pass)
-  .then(()=>{
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("chatPage").style.display="block";
-  })
-  .catch(()=>{
-    alert("Wrong login");
-  });
-}
-
-onAuthStateChanged(auth, (user)=>{
-  if(user){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("chatPage").style.display="block";
-  }else{
-    document.getElementById("loginPage").style.display="block";
-    document.getElementById("chatPage").style.display="none";
-  }
-});
 </script>
 
 </body>
