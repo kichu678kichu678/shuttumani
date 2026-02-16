@@ -130,7 +130,8 @@ index.html<!doctype html>
 
   <div id="toast" class="toast">Hi</div>
 
-  <script type="module">
+  <script 
+    type="module">
     // ====== CONFIG (your config) ======
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
     import {
