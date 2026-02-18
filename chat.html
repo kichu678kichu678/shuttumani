@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private Chat</title>
+<style>
+body{margin:0;background:#0b0b12;color:white;font-family:sans-serif}
+#login,#chat{max-width:500px;margin:50px auto;padding:20px;background:#1a1a2e;border-radius:15px}
+input,button{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none}
+button{background:#ff4da6;color:white;font-weight:bold}
+#msgs{height:300px;overflow:auto;margin:10px 0;background:#111;padding:10px;border-radius:10px}
+.me{color:#ff4da6}
+</style>
+</head>
+<body>
+
+<div id="login">
+<h2>Login</h2>
+<input id="email" placeholder="Email">
+<input id="pass" placeholder="Password" type="password">
+<button onclick="login()">Login</button>
+</div>
+
+<div id="chat" style="display:none">
+<h3>Chat</h3>
+<div id="msgs"></div>
+<input id="msg" placeholder="Message">
+<button onclick="send()">Send</button>
+<button onclick="logout()">Logout</button>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey:"AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
+authDomain:"shuttumani-chat.firebaseapp.com",
+projectId:"shuttumani-chat"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+const msgs = document.getElementById("msgs");
+
+window.login = async function(){
+await signInWithEmailAndPassword(auth,
+email.value,
+pass.value
+);
+}
+
+window.logout = function(){
+signOut(auth);
+}
+
+window.send = async function(){
+
+if(msg.value==="") return;
+
+await addDoc(collection(db,"messages"),{
+text:msg.value,
+email:auth.currentUser.email,
+time:serverTimestamp()
+});
+
+msg.value="";
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+login.style.display="none";
+chat.style.display="block";
+
+const q=query(collection(db,"messages"),orderBy("time"));
+
+onSnapshot(q,(snap)=>{
+msgs.innerHTML="";
+snap.forEach(d=>{
+const m=d.data();
+msgs.innerHTML+=`
+<div class="${m.email==user.email?'me':''}">
+${m.email}: ${m.text}
+</div>`;
+});
+});
+
+}
+else{
+login.style.display="block";
+chat.style.display="none";
+}
+
+});
+
+</script>
+</body>
+</html>
