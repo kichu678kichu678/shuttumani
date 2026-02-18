@@ -1,101 +1,479 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Shuttumani Chat</title>
-<style>
-  body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
-  .wrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;padding:20px;box-sizing:border-box}
-  .card{width:min(420px,92vw);background:#0f0f0f;border:1px solid #222;border-radius:16px;padding:16px}
-  input{width:100%;padding:14px;border:none;border-radius:12px;font-size:16px;margin-top:10px;box-sizing:border-box;text-align:center}
-  button{width:100%;padding:14px;border:none;border-radius:12px;background:#ff4da6;color:#fff;font-size:16px;margin-top:12px;cursor:pointer}
-  .hide{display:none}
-  .msg{opacity:.9;line-height:1.6}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shuttumani Private Chat</title>
+  <style>
+    :root{
+      --bg:#07070b;
+      --card:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.12);
+      --txt:#f6f6f8;
+      --mut:rgba(255,255,255,.65);
+      --pink:#ff4da6;
+      --pink2:#ff7ac2;
+      --good:#2cff73;
+      --bad:#ff3b3b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(255,77,166,.18), transparent 55%),
+        radial-gradient(700px 500px at 80% 20%, rgba(120,80,255,.16), transparent 55%),
+        radial-gradient(900px 600px at 50% 90%, rgba(0,255,140,.08), transparent 55%),
+        var(--bg);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    .glass{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+    .topbar{
+      position:sticky; top:0;
+      z-index:10;
+      margin:14px 0;
+      padding:14px 14px;
+    }
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .avatar{
+      width:42px;height:42px;border-radius:50%;
+      background:linear-gradient(135deg,var(--pink),#7f66ff);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;
+    }
+    .title{font-weight:900;font-size:18px;letter-spacing:.2px}
+    .sub{font-size:12px;color:var(--mut);margin-top:2px}
+    .status{
+      display:flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.25);
+      font-size:12px;color:var(--mut);
+      white-space:nowrap;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--bad);box-shadow:0 0 14px rgba(255,59,59,.35)}
+    .dot.ok{background:var(--good);box-shadow:0 0 14px rgba(44,255,115,.35)}
+    .btn{
+      border:none;cursor:pointer;
+      padding:11px 14px;border-radius:14px;
+      font-weight:800;color:white;
+      background:linear-gradient(135deg,var(--pink),var(--pink2));
+      box-shadow: 0 10px 25px rgba(255,77,166,.22);
+    }
+    .btn.ghost{
+      background:rgba(255,255,255,.07);
+      border:1px solid var(--stroke);
+      box-shadow:none;color:var(--txt);
+    }
+    .grid{display:grid;gap:14px}
+    .panel{padding:16px}
+    .h1{font-size:26px;font-weight:950;margin:0 0 6px}
+    .p{margin:0;color:var(--mut);line-height:1.5}
+    .field{display:grid;gap:10px;margin-top:14px}
+    input{
+      width:100%;
+      padding:13px 14px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.25);
+      color:var(--txt);
+      outline:none;
+      font-size:15px;
+    }
+    input:focus{border-color:rgba(255,77,166,.55);box-shadow:0 0 0 3px rgba(255,77,166,.12)}
+    .mini{font-size:12px;color:var(--mut);margin-top:10px}
+    .hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
+    /* Chat */
+    #msgs{
+      min-height:56vh;
+      padding:14px;
+      overflow:auto;
+    }
+    .bubble{
+      max-width:78%;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      margin:10px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+      word-wrap:break-word;
+    }
+    .me{margin-left:auto;background:rgba(255,77,166,.14);border-color:rgba(255,77,166,.35)}
+    .meta{font-size:11px;color:rgba(255,255,255,.6);margin-top:6px}
+    .bar{
+      position:sticky; bottom:0;
+      padding:14px;
+      background: linear-gradient(to top, rgba(7,7,11,.92), rgba(7,7,11,.0));
+    }
+    .barInner{
+      display:flex;gap:10px;align-items:center;
+      padding:12px;border-radius:18px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.25);
+    }
+    .barInner input{flex:1;border:none;background:transparent;padding:10px 8px}
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      color:var(--mut);font-size:12px
+    }
+    .hide{display:none !important;}
+  </style>
 </head>
+
 <body>
+  <div class="wrap">
 
-<div class="wrap">
-  <h1 style="margin:0;color:#ff4da6;">shuttumani 💋</h1>
+    <div class="topbar glass">
+      <div class="row">
+        <div class="brand">
+          <div class="avatar">S</div>
+          <div>
+            <div class="title">Shuttumani 💗</div>
+            <div class="sub" id="smallLine">Private chat</div>
+          </div>
+        </div>
 
-  <!-- LOCK CARD -->
-  <div id="lockCard" class="card">
-    <div class="msg">“ammede ponnu araaa 💋💋”</div>
-    <input id="lockInput" type="password" placeholder="Enter lock (01032025)" inputmode="numeric" />
-    <button id="unlockBtn" type="button">Unlock</button>
-    <div id="lockErr" style="margin-top:10px;color:#ff5c5c;display:none;">Wrong lock 💔</div>
+        <div class="row" style="gap:10px">
+          <div class="status">
+            <div id="onlineDot" class="dot"></div>
+            <div id="onlineText">Loading…</div>
+          </div>
+          <button id="logoutBtn" class="btn ghost hide">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCK SCREEN -->
+    <section id="lockBox" class="glass panel grid">
+      <div>
+        <h1 class="h1">Unlock 🔒</h1>
+        <p class="p">Enter our secret date to open the chat.</p>
+      </div>
+
+      <div class="field">
+        <input id="lockInput" placeholder="01032025" inputmode="numeric" maxlength="8"/>
+        <button id="unlockBtn" class="btn">Unlock</button>
+        <div class="mini">Hint: DDMMYYYY</div>
+      </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="loginBox" class="glass panel grid hide">
+      <div>
+        <h1 class="h1">Login 💞</h1>
+        <p class="p">Use the email + password you created in Firebase.</p>
+      </div>
+
+      <div class="field">
+        <input id="email" placeholder="Email" autocomplete="username"/>
+        <input id="pass" placeholder="Password" type="password" autocomplete="current-password"/>
+        <button id="loginBtn" class="btn">Login</button>
+        <div class="mini" id="loginMsg"></div>
+      </div>
+    </section>
+
+    <!-- CHAT -->
+    <section id="chatBox" class="glass hide">
+      <div class="panel">
+        <div class="row" style="align-items:flex-start">
+          <div>
+            <div style="font-weight:900;font-size:18px">💬 Our Room</div>
+            <div class="sub" id="whoLine">Signed in…</div>
+          </div>
+          <div class="tag" id="lastSeenTag">Last seen: —</div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div id="msgs"></div>
+
+      <div class="bar">
+        <div class="barInner">
+          <input id="msgInput" placeholder="Type message…" />
+          <button id="sendBtn" class="btn">Send</button>
+        </div>
+        <div class="mini">Online shows only when **she** is on this page. (You = not counted)</div>
+      </div>
+    </section>
+
   </div>
 
-  <!-- LOGIN CARD -->
-  <div id="loginCard" class="card hide">
-    <div class="msg">Login to chat 💌</div>
-    <input id="email" type="email" placeholder="Email" autocomplete="username" />
-    <input id="pass" type="password" placeholder="Password" autocomplete="current-password" />
-    <button id="loginBtn" type="button">Login</button>
-    <div id="loginErr" style="margin-top:10px;color:#ff5c5c;display:none;"></div>
-  </div>
-</div>
+  <script type="module">
+    // ========= 1) Firebase imports =========
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc, setDoc, onSnapshot,
+      collection, addDoc,
+      serverTimestamp,
+      query, orderBy, limit,
+      onSnapshot as onSnapQuery
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-  // ✅ PASTE YOUR FIREBASE CONFIG HERE (replace this object)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
-    authDomain: "shuttumani-chat.firebaseapp.com",
-    projectId: "shuttumani-chat",
-    storageBucket: "shuttumani-chat.firebasestorage.app",
-    messagingSenderId: "1033302224383",
-    appId: "1:1033302224383:web:952bdfed407ab257cf0bca"
-  };
+    // ========= 2) Your Firebase config =========
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
+      authDomain: "shuttumani-chat.firebaseapp.com",
+      projectId: "shuttumani-chat",
+      storageBucket: "shuttumani-chat.firebasestorage.app",
+      messagingSenderId: "1033302224383",
+      appId: "1:1033302224383:web:952bdfed407ab257cf0bca"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    // ========= 3) Init =========
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  // lock
-  const lockCard = document.getElementById("lockCard");
-  const loginCard = document.getElementById("loginCard");
-  const lockInput = document.getElementById("lockInput");
-  const unlockBtn = document.getElementById("unlockBtn");
-  const lockErr = document.getElementById("lockErr");
+    // ========= UI refs =========
+    const lockBox = document.getElementById("lockBox");
+    const lockInput = document.getElementById("lockInput");
+    const unlockBtn = document.getElementById("unlockBtn");
 
-  unlockBtn.onclick = () => {
-    const v = lockInput.value.trim();
-    if(v === "01032025"){
-      lockErr.style.display="none";
-      lockCard.classList.add("hide");
-      loginCard.classList.remove("hide");
-    } else {
-      lockErr.style.display="block";
+    const loginBox = document.getElementById("loginBox");
+    const emailEl = document.getElementById("email");
+    const passEl = document.getElementById("pass");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMsg = document.getElementById("loginMsg");
+
+    const chatBox = document.getElementById("chatBox");
+    const msgs = document.getElementById("msgs");
+    const msgInput = document.getElementById("msgInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    const onlineDot = document.getElementById("onlineDot");
+    const onlineText = document.getElementById("onlineText");
+    const lastSeenTag = document.getElementById("lastSeenTag");
+    const whoLine = document.getElementById("whoLine");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const SECRET = "01032025";
+    const ROOM_ID = "our-room";
+    const HER_EMAIL = "kk8477089@gmail.com"; // fixed
+    const HER_UID = "SAy45xarKaXAL9gHFGGJkxLUHpq1";
+
+    // ========= 4) Lock flow =========
+    function show(el){ el.classList.remove("hide"); }
+    function hide(el){ el.classList.add("hide"); }
+
+    function unlockOk(){
+      hide(lockBox);
+      show(loginBox);
+      loginMsg.textContent = "";
     }
-  };
 
-  // login
-  const email = document.getElementById("email");
-  const pass = document.getElementById("pass");
-  const loginBtn = document.getElementById("loginBtn");
-  const loginErr = document.getElementById("loginErr");
-
-  loginBtn.onclick = async () => {
-    loginErr.style.display="none";
-    try{
-      await signInWithEmailAndPassword(auth, email.value.trim(), pass.value);
-      window.location.href = "chat.html";
-    }catch(e){
-      loginErr.textContent = e.message;
-      loginErr.style.display="block";
+    if (localStorage.getItem("sh_lock_ok") === "1") {
+      unlockOk();
     }
-  };
 
-  // if already logged in → go chat directly
-  onAuthStateChanged(auth, (user)=>{
-    if(user){
-      window.location.href = "chat.html";
+    unlockBtn.onclick = () => {
+      const v = (lockInput.value || "").trim();
+      if (v === SECRET) {
+        localStorage.setItem("sh_lock_ok","1");
+        unlockOk();
+      } else {
+        lockInput.value = "";
+        lockInput.placeholder = "Wrong 😅 try again";
+      }
+    };
+
+    // ========= 5) Login =========
+    loginBtn.onclick = async () => {
+      loginMsg.textContent = "Logging in…";
+      try{
+        await signInWithEmailAndPassword(auth, emailEl.value.trim(), passEl.value);
+        loginMsg.textContent = "";
+      }catch(e){
+        loginMsg.textContent = "Login failed. Check email/password.";
+      }
+    };
+
+    logoutBtn.onclick = async () => {
+      await signOut(auth);
+      // keep lock saved. if you want lock again, remove next line:
+      // localStorage.removeItem("sh_lock_ok");
+    };
+
+    // ========= 6) Presence (online + last seen) =========
+    let myUid = null;
+    let myEmail = null;
+    let unsubMsgs = null;
+    let unsubPresenceOther = null;
+
+    function setOnlineUI(isOnline, lastSeenDate){
+      if(isOnline){
+        onlineDot.classList.add("ok");
+        onlineText.textContent = "She is online";
+        lastSeenTag.textContent = "Last seen: now";
+      }else{
+        onlineDot.classList.remove("ok");
+        onlineText.textContent = "She is offline";
+        if(lastSeenDate){
+          lastSeenTag.textContent = "Last seen: " + lastSeenDate.toLocaleString();
+        }else{
+          lastSeenTag.textContent = "Last seen: —";
+        }
+      }
     }
-  });
-</script>
 
+    async function setMyPresence(online){
+      if(!myUid) return;
+      await setDoc(doc(db, "presence", myUid), {
+        email: myEmail,
+        online: online,
+        lastSeen: serverTimestamp()
+      }, { merge:true });
+    }
+
+    // ========= 7) Chat load =========
+    function clearMsgs(){ msgs.innerHTML = ""; }
+
+    function addBubble({text, email, createdAt}){
+      const div = document.createElement("div");
+      div.className = "bubble" + (email === myEmail ? " me" : "");
+      div.innerHTML = `
+        <div>${escapeHtml(text)}</div>
+        <div class="meta">${email || "unknown"} • ${createdAt ? new Date(createdAt).toLocaleString() : ""}</div>
+      `;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function escapeHtml(s){
+      return (s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    async function sendMsg(){
+      const t = (msgInput.value||"").trim();
+      if(!t) return;
+      msgInput.value = "";
+      await addDoc(collection(db, "rooms", ROOM_ID, "messages"), {
+        text: t,
+        email: myEmail,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    sendBtn.onclick = sendMsg;
+    msgInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") sendMsg(); });
+
+    // ========= 8) Auth state =========
+    onAuthStateChanged(auth, async (user) => {
+      if(!user){
+        // logged out state
+        hide(chatBox);
+        hide(logoutBtn);
+        show(loginBox);
+        clearMsgs();
+        myUid = null;
+        myEmail = null;
+        onlineText.textContent = "Loading…";
+        onlineDot.classList.remove("ok");
+        lastSeenTag.textContent = "Last seen: —";
+        if(unsubMsgs) unsubMsgs();
+        if(unsubPresenceOther) unsubPresenceOther();
+        return;
+      }
+
+      // logged in
+      myUid = user.uid;
+      myEmail = user.email || "";
+      whoLine.textContent = "Signed in as: " + myEmail;
+      hide(loginBox);
+      show(chatBox);
+      show(logoutBtn);
+
+      // mark me online + update lastSeen
+      await setMyPresence(true);
+
+      // when closing page mark offline (best effort)
+      window.addEventListener("beforeunload", () => { setMyPresence(false); });
+
+      // listen messages
+      clearMsgs();
+      const qMsgs = query(
+        collection(db, "rooms", ROOM_ID, "messages"),
+        orderBy("createdAt", "asc"),
+        limit(200)
+      );
+
+      if(unsubMsgs) unsubMsgs();
+      unsubMsgs = onSnapQuery(qMsgs, (snap)=>{
+        clearMsgs();
+        snap.forEach(docu=>{
+          const d = docu.data();
+          addBubble({
+            text: d.text,
+            email: d.email,
+            createdAt: d.createdAt?.toDate ? d.createdAt.toDate() : null
+          });
+        });
+      });
+
+      // listen "her presence" ONLY
+      // We find her presence by scanning presence docs is hard without query rules,
+      // so we store presence by uid. Simple way: we show online only if any presence doc has HER_EMAIL.
+      // We'll do a lightweight listener on a single doc AFTER we discover it once.
+      // For now, do a room-based "heartbeat": when she opens chat, she also writes a roomPresence doc.
+      const myRoomPresenceRef = doc(db, "rooms", ROOM_ID, "roomPresence", myUid);
+      await setDoc(myRoomPresenceRef, {
+        email: myEmail,
+        online: true,
+        lastSeen: serverTimestamp()
+      }, {merge:true});
+
+      window.addEventListener("beforeunload", () => {
+        setDoc(myRoomPresenceRef, { online:false, lastSeen: serverTimestamp() }, {merge:true});
+      });
+
+      // Listen HER presence ONLY
+if(unsubPresenceOther) unsubPresenceOther();
+
+const herRef = doc(db, "presence", HER_UID);
+
+unsubPresenceOther = onSnapshot(herRef, (snap) => {
+
+  if(!snap.exists()){
+    setOnlineUI(false, null);
+    return;
+  }
+
+  const data = snap.data();
+
+  if(data.online === true){
+    setOnlineUI(true, null);
+  }else{
+    const last = data.lastSeen?.toDate ? data.lastSeen.toDate() : null;
+    setOnlineUI(false, last);
+  }
+
+});
+
+    // NOTE:
+    // To make "She is online" perfect, we must know her UID once.
+    // After she logs in first time, you will see her UID in Firebase Authentication user list.
+    // Then we add it as HER_UID and listen that doc only. (Step 4 below)
+  </script>
 </body>
 </html>
