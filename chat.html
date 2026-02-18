@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shuttumani Private Chat</title>
-
+  <title>Shuttumani 🔒</title>
   <style>
     :root{
       --bg:#07070b;
@@ -14,13 +13,11 @@
       --mut:rgba(255,255,255,.65);
       --pink:#ff4da6;
       --pink2:#ff7ac2;
-      --good:#2cff73;
-      --bad:#ff3b3b;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:
         radial-gradient(900px 500px at 20% 10%, rgba(255,77,166,.18), transparent 55%),
@@ -28,356 +25,101 @@
         radial-gradient(900px 600px at 50% 90%, rgba(0,255,140,.08), transparent 55%),
         var(--bg);
       min-height:100vh;
-      overflow-x:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
     }
-    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    .wrap{width:min(520px, 100%);}
     .glass{
       background:var(--card);
       border:1px solid var(--stroke);
       border-radius:18px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-      backdrop-filter: blur(10px);
+      box-shadow:0 12px 40px rgba(0,0,0,.35);
+      backdrop-filter:blur(10px);
+      padding:18px;
     }
-    .topbar{
-      position:sticky; top:0;
-      z-index:10;
-      margin:14px 0;
-      padding:14px 14px;
+    .top{
+      display:flex; align-items:center; gap:12px; margin-bottom:12px;
     }
-    .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:10px}
     .avatar{
-      width:42px;height:42px;border-radius:50%;
+      width:44px;height:44px;border-radius:50%;
       background:linear-gradient(135deg,var(--pink),#7f66ff);
       display:flex;align-items:center;justify-content:center;
-      font-weight:800;
+      font-weight:900;
     }
-    .title{font-weight:900;font-size:18px;letter-spacing:.2px}
-    .sub{font-size:12px;color:var(--mut);margin-top:2px}
-    .status{
-      display:flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid var(--stroke);
-      background:rgba(0,0,0,.25);
-      font-size:12px;color:var(--mut);
-      white-space:nowrap;
-    }
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--bad);box-shadow:0 0 14px rgba(255,59,59,.35)}
-    .dot.ok{background:var(--good);box-shadow:0 0 14px rgba(44,255,115,.35)}
-    .btn{
-      border:none;cursor:pointer;
-      padding:11px 14px;border-radius:14px;
-      font-weight:800;color:white;
-      background:linear-gradient(135deg,var(--pink),var(--pink2));
-      box-shadow: 0 10px 25px rgba(255,77,166,.22);
-    }
-    .btn.ghost{
-      background:rgba(255,255,255,.07);
-      border:1px solid var(--stroke);
-      box-shadow:none;color:var(--txt);
-    }
-    .grid{display:grid;gap:14px}
-    .panel{padding:16px}
-    .h1{font-size:26px;font-weight:950;margin:0 0 6px}
-    .p{margin:0;color:var(--mut);line-height:1.5}
-    .field{display:grid;gap:10px;margin-top:14px}
+    h1{margin:0;font-size:28px}
+    p{margin:6px 0 0;color:var(--mut);line-height:1.5}
+    .field{display:grid; gap:10px; margin-top:14px;}
     input{
       width:100%;
-      padding:13px 14px;
+      padding:14px 14px;
       border-radius:14px;
       border:1px solid var(--stroke);
       background:rgba(0,0,0,.25);
       color:var(--txt);
       outline:none;
-      font-size:15px;
+      font-size:16px;
     }
-    input:focus{border-color:rgba(255,77,166,.55);box-shadow:0 0 0 3px rgba(255,77,166,.12)}
-    .mini{font-size:12px;color:var(--mut);margin-top:10px}
-    .hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
-
-    #msgs{min-height:56vh;padding:14px;overflow:auto;}
-    .bubble{
-      max-width:78%;
-      padding:12px 12px;
-      border-radius:16px;
-      border:1px solid var(--stroke);
-      background:rgba(255,255,255,.06);
-      margin:10px 0;
-      box-shadow: 0 8px 25px rgba(0,0,0,.25);
-      word-wrap:break-word;
+    input:focus{
+      border-color:rgba(255,77,166,.55);
+      box-shadow:0 0 0 3px rgba(255,77,166,.12)
     }
-    .me{margin-left:auto;background:rgba(255,77,166,.14);border-color:rgba(255,77,166,.35)}
-    .meta{font-size:11px;color:rgba(255,255,255,.6);margin-top:6px}
-
-    .bar{
-      position:sticky; bottom:0;
-      padding:14px;
-      background: linear-gradient(to top, rgba(7,7,11,.92), rgba(7,7,11,.0));
+    button{
+      border:none;cursor:pointer;
+      padding:12px 14px;border-radius:14px;
+      font-weight:900;color:white;font-size:16px;
+      background:linear-gradient(135deg,var(--pink),var(--pink2));
+      box-shadow:0 10px 25px rgba(255,77,166,.22);
     }
-    .barInner{
-      display:flex;gap:10px;align-items:center;
-      padding:12px;border-radius:18px;
-      border:1px solid var(--stroke);
-      background:rgba(0,0,0,.25);
-    }
-    .barInner input{flex:1;border:none;background:transparent;padding:10px 8px}
-    .tag{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid var(--stroke);
-      background:rgba(255,255,255,.06);
-      color:var(--mut);font-size:12px
-    }
+    .mini{font-size:12px;color:var(--mut)}
+    .msg{font-size:13px;color:var(--mut);min-height:18px}
     .hide{display:none !important;}
   </style>
 </head>
-
 <body>
   <div class="wrap">
-    <div class="topbar glass">
-      <div class="row">
-        <div class="brand">
-          <div class="avatar">S</div>
-          <div>
-            <div class="title">Shuttumani 💗</div>
-            <div class="sub" id="smallLine">Private chat</div>
-          </div>
-        </div>
-
-        <div class="row" style="gap:10px">
-          <div class="status">
-            <div id="onlineDot" class="dot"></div>
-            <div id="onlineText">Loading…</div>
-          </div>
-          <button id="logoutBtn" class="btn ghost hide">Logout</button>
+    <div class="glass">
+      <div class="top">
+        <div class="avatar">S</div>
+        <div>
+          <h1>Unlock 🔒</h1>
+          <p>Enter our secret date to open.</p>
         </div>
       </div>
-    </div>
 
-    <!-- LOCK -->
-    <section id="lockBox" class="glass panel grid">
-      <div>
-        <h1 class="h1">Unlock 🔒</h1>
-        <p class="p">Enter our secret date to open the chat.</p>
-      </div>
       <div class="field">
-        <input id="lockInput" placeholder="01032025" inputmode="numeric" maxlength="8"/>
-        <button id="unlockBtn" class="btn">Unlock</button>
+        <input id="lockInput" placeholder="01032025" inputmode="numeric" maxlength="8" />
+        <button id="unlockBtn">Unlock</button>
+        <div class="msg" id="msg"></div>
         <div class="mini">Hint: DDMMYYYY</div>
       </div>
-    </section>
-
-    <!-- LOGIN -->
-    <section id="loginBox" class="glass panel grid hide">
-      <div>
-        <h1 class="h1">Login 💞</h1>
-        <p class="p">Use the email + password you created in Firebase.</p>
-      </div>
-      <div class="field">
-        <input id="email" placeholder="Email" autocomplete="username"/>
-        <input id="pass" placeholder="Password" type="password" autocomplete="current-password"/>
-        <button id="loginBtn" class="btn">Login</button>
-        <div class="mini" id="loginMsg"></div>
-      </div>
-    </section>
-
-    <!-- CHAT -->
-    <section id="chatBox" class="glass hide">
-      <div class="panel">
-        <div class="row" style="align-items:flex-start">
-          <div>
-            <div style="font-weight:900;font-size:18px">💬 Our Room</div>
-            <div class="sub" id="whoLine">Signed in…</div>
-          </div>
-          <div class="tag" id="lastSeenTag">Last seen: —</div>
-        </div>
-      </div>
-      <div class="hr"></div>
-      <div id="msgs"></div>
-
-      <div class="bar">
-        <div class="barInner">
-          <input id="msgInput" placeholder="Type message…" />
-          <button id="sendBtn" class="btn">Send</button>
-        </div>
-        <div class="mini">Online indicator shows HER only.</div>
-      </div>
-    </section>
+    </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot as onSnapQuery } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDJ5nrd-sCZNvCsg3THxXhewT0cBzkDoCI",
-      authDomain: "shuttumani-chat.firebaseapp.com",
-      projectId: "shuttumani-chat",
-      storageBucket: "shuttumani-chat.firebasestorage.app",
-      messagingSenderId: "1033302224383",
-      appId: "1:1033302224383:web:952bdfed407ab257cf0bca"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
+  <script>
     const SECRET = "01032025";
-    const ROOM_ID = "our-room";
-    const HER_UID = "SAy45xarKaXAL9gHFGGJkxLUHpq1";
-
-    const lockBox = document.getElementById("lockBox");
-    const loginBox = document.getElementById("loginBox");
-    const chatBox = document.getElementById("chatBox");
-
-    const onlineDot = document.getElementById("onlineDot");
-    const onlineText = document.getElementById("onlineText");
-    const lastSeenTag = document.getElementById("lastSeenTag");
-
     const lockInput = document.getElementById("lockInput");
     const unlockBtn = document.getElementById("unlockBtn");
+    const msg = document.getElementById("msg");
 
-    const emailEl = document.getElementById("email");
-    const passEl = document.getElementById("pass");
-    const loginBtn = document.getElementById("loginBtn");
-    const loginMsg = document.getElementById("loginMsg");
-
-    const whoLine = document.getElementById("whoLine");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    const msgs = document.getElementById("msgs");
-    const msgInput = document.getElementById("msgInput");
-    const sendBtn = document.getElementById("sendBtn");
-
-    function show(el){ el.classList.remove("hide"); }
-    function hide(el){ el.classList.add("hide"); }
-
-    // LOCK
-    function unlockOk(){
-      hide(lockBox);
-      show(loginBox);
-      localStorage.setItem("sh_lock_ok","1");
+    function unlockedUI(){
+      msg.textContent = "✅ Unlocked! (Next step: Login screen)";
+      msg.style.color = "#2cff73";
     }
-    if(localStorage.getItem("sh_lock_ok")==="1") unlockOk();
+
+    if(localStorage.getItem("sh_lock_ok")==="1") unlockedUI();
 
     unlockBtn.addEventListener("click", ()=>{
       const v = (lockInput.value||"").trim();
-      if(v===SECRET) unlockOk();
-      else alert("Wrong date ❤️");
-    });
-
-    // LOGIN
-    loginBtn.addEventListener("click", async ()=>{
-      loginMsg.textContent = "Logging in…";
-      try{
-        await signInWithEmailAndPassword(auth, emailEl.value.trim(), passEl.value);
-        loginMsg.textContent = "";
-      }catch(e){
-        console.log(e);
-        loginMsg.textContent = "Login failed. Check email/password or Firebase settings.";
-      }
-    });
-
-    logoutBtn.addEventListener("click", async ()=>{
-      await signOut(auth);
-    });
-
-    // CHAT
-    function escapeHtml(s){
-      return (s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-    function addBubble({text,email,createdAt,myEmail}){
-      const div = document.createElement("div");
-      div.className = "bubble" + (email===myEmail ? " me":"");
-      div.innerHTML = `
-        <div>${escapeHtml(text)}</div>
-        <div class="meta">${email||"unknown"} • ${createdAt?new Date(createdAt).toLocaleString():""}</div>
-      `;
-      msgs.appendChild(div);
-      msgs.scrollTop = msgs.scrollHeight;
-    }
-
-    async function sendMsg(myEmail){
-      const t = (msgInput.value||"").trim();
-      if(!t) return;
-      msgInput.value = "";
-      await addDoc(collection(db,"rooms",ROOM_ID,"messages"),{
-        text:t,
-        email:myEmail,
-        createdAt:serverTimestamp()
-      });
-    }
-
-    // Presence UI
-    function setOnlineUI(isOnline, lastSeen){
-      if(isOnline){
-        onlineDot.classList.add("ok");
-        onlineText.textContent = "She is online";
-        lastSeenTag.textContent = "Last seen: now";
+      if(v === SECRET){
+        localStorage.setItem("sh_lock_ok","1");
+        unlockedUI();
       }else{
-        onlineDot.classList.remove("ok");
-        onlineText.textContent = "She is offline";
-        lastSeenTag.textContent = "Last seen: " + (lastSeen ? lastSeen.toLocaleString() : "—");
+        msg.textContent = "❌ Wrong date. Try again.";
+        msg.style.color = "#ff3b3b";
+        lockInput.value = "";
       }
-    }
-
-    onSnapshot(doc(db,"presence",HER_UID),(snap)=>{
-      if(!snap.exists()){ setOnlineUI(false,null); return; }
-      const d = snap.data();
-      const last = d.lastSeen?.toDate ? d.lastSeen.toDate() : null;
-      setOnlineUI(!!d.online, last);
-    });
-
-    // Auth state
-    let unsubMsgs = null;
-
-    onAuthStateChanged(auth, async (user)=>{
-      if(!user){
-        hide(chatBox);
-        hide(logoutBtn);
-        show(loginBox);
-        msgs.innerHTML = "";
-        return;
-      }
-
-      const myUid = user.uid;
-      const myEmail = user.email || "";
-      whoLine.textContent = "Signed in as: " + myEmail;
-
-      hide(loginBox);
-      show(chatBox);
-      show(logoutBtn);
-
-      // set MY presence doc
-      await setDoc(doc(db,"presence",myUid),{
-        email:myEmail,
-        online:true,
-        lastSeen:serverTimestamp()
-      },{merge:true});
-
-      window.addEventListener("beforeunload", ()=>{
-        setDoc(doc(db,"presence",myUid),{online:false,lastSeen:serverTimestamp()},{merge:true});
-      });
-
-      // Messages listener
-      const qMsgs = query(collection(db,"rooms",ROOM_ID,"messages"),orderBy("createdAt","asc"),limit(300));
-      if(unsubMsgs) unsubMsgs();
-      unsubMsgs = onSnapQuery(qMsgs,(snap)=>{
-        msgs.innerHTML = "";
-        snap.forEach(docu=>{
-          const d = docu.data();
-          addBubble({
-            text:d.text,
-            email:d.email,
-            createdAt:d.createdAt?.toDate ? d.createdAt.toDate() : null,
-            myEmail
-          });
-        });
-      });
-
-      sendBtn.onclick = ()=>sendMsg(myEmail);
-      msgInput.onkeydown = (e)=>{ if(e.key==="Enter") sendMsg(myEmail); };
     });
   </script>
 </body>
